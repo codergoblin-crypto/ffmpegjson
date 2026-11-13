@@ -1,0 +1,130 @@
+{
+  "inputs": [
+    "video.mp4"
+  ],
+  "size": "1080x1920",
+  "fps": 30,
+  "steps": [
+    {
+      "in": [
+        "0:v"
+      ],
+      "chain": [
+        "scale=1080:1920:force_original_aspect_ratio=increase",
+        "crop=1080:1920",
+        "setsar=1"
+      ],
+      "out": "base"
+    },
+    {
+      "in": [
+        "base"
+      ],
+      "filter": "dynamic_zoom",
+      "args": {
+        "from": 1.0,
+        "to": 1.08,
+        "start": 0,
+        "end": 8,
+        "ease": "inout"
+      },
+      "out": "v1"
+    },
+    {
+      "in": [
+        "v1"
+      ],
+      "filter": "punch_in",
+      "args": {
+        "at": [
+          2.0,
+          5.2,
+          7.0
+        ],
+        "zoom": 1.18,
+        "attack": 0.05,
+        "hold": 0.22,
+        "release": 0.22
+      },
+      "out": "v2"
+    },
+    {
+      "in": [
+        "v2"
+      ],
+      "filter": "shake",
+      "args": {
+        "at": [
+          5.2,
+          7.0
+        ],
+        "amount": 12,
+        "speed": 14,
+        "hold": 0.08,
+        "release": 0.22
+      },
+      "out": "v3"
+    },
+    {
+      "in": [
+        "v3"
+      ],
+      "filter": "flash",
+      "args": {
+        "at": [
+          7.0
+        ],
+        "strength": 0.7,
+        "attack": 0.02,
+        "hold": 0.02,
+        "release": 0.16
+      },
+      "out": "v4"
+    },
+    {
+      "in": [
+        "v4"
+      ],
+      "filter": "caption",
+      "args": {
+        "text": "WAIT... WHAT?!",
+        "start": 0.2,
+        "end": 2.0,
+        "animation": "pop",
+        "fontsize": 92,
+        "color": "white",
+        "border": 7,
+        "bordercolor": "black",
+        "position": "center",
+        "upper": true
+      },
+      "out": "v5"
+    },
+    {
+      "in": [
+        "v5"
+      ],
+      "filter": "caption",
+      "args": {
+        "text": "BRO WHAT JUST HAPPENED",
+        "start": 5.0,
+        "end": 7.8,
+        "animation": "words",
+        "word_time": 0.28,
+        "fontsize": 78,
+        "color": "yellow",
+        "border": 7,
+        "bordercolor": "black",
+        "position": "bottom",
+        "upper": true
+      },
+      "out": "v"
+    }
+  ],
+  "map": [
+    "v",
+    "0:a?"
+  ],
+  "options": "-c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart",
+  "output": "edited_reel.mp4"
+}
