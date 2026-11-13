@@ -1,0 +1,153 @@
+{
+  "inputs": [
+    {
+      "path": "video1.mp4",
+      "options": [
+        "-ss",
+        "294",
+        "-t",
+        "13"
+      ]
+    }
+  ],
+  "size": "1080x1920",
+  "fps": 30,
+  "steps": [
+    {
+      "in": [
+        "0:v"
+      ],
+      "filter": "fps",
+      "args": 30,
+      "out": "src"
+    },
+    {
+      "in": [
+        "src"
+      ],
+      "filter": "split",
+      "args": 2,
+      "out": [
+        "bgs",
+        "fgs"
+      ]
+    },
+    {
+      "in": [
+        "bgs"
+      ],
+      "chain": [
+        "scale=270:480:force_original_aspect_ratio=increase",
+        "crop=270:480",
+        "gblur=sigma=8",
+        "scale=1080:1920",
+        "eq=brightness=-0.2:saturation=1.2"
+      ],
+      "out": "bg"
+    },
+    {
+      "in": [
+        "fgs"
+      ],
+      "filter": "scale",
+      "args": "1080:-2",
+      "out": "fg"
+    },
+    {
+      "in": [
+        "bg",
+        "fg"
+      ],
+      "filter": "overlay",
+      "args": "0:(H-h)/2",
+      "out": "e0"
+    },
+    {
+      "in": [
+        "e0"
+      ],
+      "filter": "punch_in",
+      "args": {
+        "at": [
+          3.9,
+          5.25,
+          7.0
+        ],
+        "zoom": 1.35,
+        "hold": 0.25,
+        "y": 0.5
+      },
+      "out": "e1"
+    },
+    {
+      "in": [
+        "e1"
+      ],
+      "filter": "flash",
+      "args": {
+        "at": [
+          3.9,
+          5.25
+        ],
+        "strength": 0.8
+      },
+      "out": "e2"
+    },
+    {
+      "in": [
+        "e2"
+      ],
+      "filter": "rgb_split",
+      "args": {
+        "amount": 14,
+        "at": [
+          5.25,
+          7.0
+        ],
+        "duration": 0.25
+      },
+      "out": "e3"
+    },
+    {
+      "in": [
+        "e3"
+      ],
+      "filter": "caption",
+      "args": {
+        "text": "WAIT FOR IT",
+        "start": 0.3,
+        "end": 3.0,
+        "animation": "words",
+        "position": 0.2,
+        "fontsize": 80,
+        "color": "yellow",
+        "upper": true,
+        "word_time": 0.5
+      },
+      "out": "e4"
+    },
+    {
+      "in": [
+        "e4"
+      ],
+      "filter": "caption",
+      "args": {
+        "text": "HE CAME IN HOT",
+        "start": 3.6,
+        "end": 8.5,
+        "animation": "pop",
+        "position": 0.2,
+        "fontsize": 80,
+        "color": "white",
+        "upper": true
+      },
+      "out": "v"
+    }
+  ],
+  "map": [
+    "v",
+    "0:a"
+  ],
+  "options": "-c:v libx264 -preset veryfast -crf 19 -pix_fmt yuv420p -r 30 -c:a aac -b:a 160k -movflags +faststart",
+  "output": "reel_1_dance_entrance.mp4"
+}
